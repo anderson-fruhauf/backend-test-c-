@@ -8,6 +8,21 @@ public class Product
 
     public Product(Guid id, string name, decimal price)
     {
+        if (id == Guid.Empty)
+        {
+            throw new ArgumentException("Id cannot be empty.", nameof(id));
+        }
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("Name cannot be empty.", nameof(name));
+        }
+
+        if (price < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(price), "Price cannot be negative.");
+        }
+
         Id = id;
         Name = name;
         Price = price;
