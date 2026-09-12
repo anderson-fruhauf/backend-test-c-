@@ -9,6 +9,8 @@ public class OrderItem
     public decimal UnitPrice { get; private set; }
     public decimal Total => UnitPrice * Quantity;
 
+    private OrderItem() { }
+
     public OrderItem(Guid id, Guid productId, string productName, int quantity, decimal price)
     {
         if (id == Guid.Empty)

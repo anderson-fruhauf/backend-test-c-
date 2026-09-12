@@ -12,6 +12,8 @@ public class Order
     public DateTime? ClosedAt { get; private set; }
     public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
 
+    private Order() { }
+
     public Order(Guid id)
     {
         if (id == Guid.Empty)
