@@ -1,6 +1,16 @@
 @Store.Api_HostAddress = http://localhost:5278
 
-GET {{Store.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Create order
+POST {{Store.Api_HostAddress}}/api/orders
 
-###
+### List orders
+GET {{Store.Api_HostAddress}}/api/orders
+
+### Get order
+GET {{Store.Api_HostAddress}}/api/orders/00000000-0000-0000-0000-000000000000
+
+### Seeded products
+### Notebook  11111111-1111-1111-1111-111111111111  3500
+### Mouse     22222222-2222-2222-2222-222222222222  100
+### Teclado   33333333-3333-3333-3333-333333333333  200
+### Monitor   44444444-4444-4444-4444-444444444444  1200
