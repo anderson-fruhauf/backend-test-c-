@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Store.Application.Abstractions;
+using Store.Domain.Entities;
+using Store.Domain.Enums;
 
 namespace Store.Infrastructure.Persistence.Repositories;
-
-using Application.Abstractions;
-using Persistence;
-using Domain.Entities;
 
 public class OrderRepository : IOrderRepository
 {
@@ -17,10 +16,31 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Items)
             .FirstOrDefaultAsync(order => order.Id == id, cancellationToken);
 
-    public async Task<IReadOnlyList<Order>> GetAllAsync(CancellationToken cancellationToken = default)
-        => await _context.Orders
+    public async Task<OrderSearchResult> SearchAsync(
+        OrderStatus? status,
+        int skip,
+        int take,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _context.Orders
             .Include(order => order.Items)
+            .AsQueryable();
+
+        if (status is not null)
+        {
+            query = query.Where(order => order.Status == status);
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .OrderByDescending(order => order.CreatedAt)
+            .Skip(skip)
+            .Take(take)
             .ToListAsync(cancellationToken);
+
+        return new OrderSearchResult(items, totalCount);
+    }
 
     public async Task AddAsync(Order order, CancellationToken cancellationToken = default)
         => await _context.Orders.AddAsync(order, cancellationToken);

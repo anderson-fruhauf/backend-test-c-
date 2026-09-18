@@ -1,21 +1,21 @@
 using Store.Application.Abstractions;
 
-namespace Store.Application.Orders.Queries.GetOrders;
+namespace Store.Application.Catalog.Queries.GetProducts;
 
-public class GetOrdersHandler
+public class GetProductsHandler
 {
     private const int DefaultPageSize = 10;
     private const int MaxPageSize = 50;
 
-    private readonly IOrderRepository _orders;
+    private readonly IProductRepository _products;
 
-    public GetOrdersHandler(IOrderRepository orders)
+    public GetProductsHandler(IProductRepository products)
     {
-        _orders = orders;
+        _products = products;
     }
 
-    public async Task<PagedResponse<OrderResponse>> Handle(
-        GetOrdersQuery query,
+    public async Task<PagedResponse<ProductResponse>> Handle(
+        GetProductsQuery query,
         CancellationToken cancellationToken = default)
     {
         var page = query.Page < 1 ? 1 : query.Page;
@@ -24,14 +24,14 @@ public class GetOrdersHandler
             : Math.Min(query.PageSize, MaxPageSize);
 
         var skip = (page - 1) * pageSize;
-        var result = await _orders.SearchAsync(
-            query.Status,
+        var result = await _products.SearchAsync(
+            query.Name,
             skip,
             pageSize,
             cancellationToken);
 
-        return new PagedResponse<OrderResponse>(
-            result.Items.Select(OrderResponse.From).ToList(),
+        return new PagedResponse<ProductResponse>(
+            result.Items.Select(ProductResponse.From).ToList(),
             page,
             pageSize,
             result.TotalCount);
