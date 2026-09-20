@@ -1,3 +1,4 @@
+using Store.Api.Middleware;
 using Store.Application;
 using Store.Infrastructure;
 using Store.Infrastructure.Persistence;
@@ -17,6 +18,8 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     ProductSeed.Apply(context);
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {
