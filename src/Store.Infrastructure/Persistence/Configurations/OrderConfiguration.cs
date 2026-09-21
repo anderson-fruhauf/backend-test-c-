@@ -9,6 +9,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     public void Configure(EntityTypeBuilder<Order> builder)
     {
         builder.HasKey(order => order.Id);
+        builder.Property(order => order.Id).ValueGeneratedNever();
 
         builder.HasMany(order => order.Items)
             .WithOne()
